@@ -1,0 +1,21 @@
+{
+  "name": "Google Disconnect",
+  "version": "1.0.0",
+  "description": "Stop Google from tracking the webpages you go to.",
+  "icons": {"48": "48.png", "128": "128.png"},
+  "permissions": [
+    "contextMenus",
+    "cookies",
+    "idle",
+    "notifications",
+    "unlimitedStorage",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "content_scripts": [{
+    "matches": ["http://*/*", "https://*/*"],
+    "js": ["content.js"],
+    "run_at": "document_start",
+    "all_frames": true
+  }]
+}
