@@ -21,10 +21,10 @@
 */
 
 /* The XPCOM interfaces. */
-const INTERFACES = Components.interfaces;
+const GOOGLE_INTERFACES = Components.interfaces;
 
 /* The domain names Google phones home with, lowercased. */
-const DOMAINS = [
+const GOOGLE_DOMAINS = [
   '2mdn.net',
   'doubleclick.net',
   'feedburner.com',
@@ -47,20 +47,21 @@ function isMatching(url, domains) {
 
 /* Traps and selectively cancels a request. */
 Components.classes['@mozilla.org/observer-service;1']
-  .getService(INTERFACES.nsIObserverService)
+  .getService(GOOGLE_INTERFACES.nsIObserverService)
   .addObserver({observe: function(subject) {
     const NOTIFICATION_CALLBACKS =
-        subject.QueryInterface(INTERFACES.nsIHttpChannel).notificationCallbacks
-            || subject.loadGroup.notificationCallbacks;
+        subject.QueryInterface(
+          GOOGLE_INTERFACES.nsIHttpChannel
+        ).notificationCallbacks || subject.loadGroup.notificationCallbacks;
     const BROWSER =
         NOTIFICATION_CALLBACKS &&
             gBrowser.getBrowserForDocument(
               NOTIFICATION_CALLBACKS
-                .getInterface(INTERFACES.nsIDOMWindow).top.document
+                .getInterface(GOOGLE_INTERFACES.nsIDOMWindow).top.document
             );
     subject.referrer.ref;
         // HACK: The URL read otherwise outraces the window unload.
-    BROWSER && !isMatching(BROWSER.currentURI.spec, DOMAINS) &&
-        isMatching(subject.URI.spec, DOMAINS) &&
+    BROWSER && !isMatching(BROWSER.currentURI.spec, GOOGLE_DOMAINS) &&
+        isMatching(subject.URI.spec, GOOGLE_DOMAINS) &&
             subject.cancel(Components.results.NS_ERROR_ABORT);
   }}, 'http-on-modify-request', false);
