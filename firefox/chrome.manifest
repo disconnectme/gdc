@@ -17,6 +17,6 @@
 # Authors (one per line):
 #
 #   Brian Kennish <byoogle@gmail.com>
-content gdc chrome/content/
-skin gdc default chrome/skin/
-overlay chrome://browser/content/browser.xul chrome://gdc/content/overlay.xul
+content ggdc chrome/content/
+skin ggdc default chrome/skin/
+overlay chrome://browser/content/browser.xul chrome://ggdc/content/overlay.xul

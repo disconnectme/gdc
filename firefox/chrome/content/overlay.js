@@ -20,103 +20,117 @@
     Brian Kennish <byoogle@gmail.com>
 */
 
-/* The XPCOM interfaces. */
-const GOOGLE_INTERFACES = Components.interfaces;
+if (typeof Ggdc == "undefined") {  
 
-/* The domain names Google phones home with, lowercased. */
-const GOOGLE_DOMAINS = [
-  '2mdn.net',
-  'accounts.google.com',
-  'blogger.com',
-  'books.google.com',
-  'code.google.com',
-  'docs.google.com',
-  'doubleclick.net',
-  'earth.google.com',
-  'feedburner.com',
-  'gmodules.com',
-  'google-analytics.com',
-  'google.com/alerts',
-  'google.com/blogsearch',
-  'google.com/bookmarks',
-  'google.com/calendar',
-  'google.com/chrome',
-  'google.com/coop',
-  'google.com/cse',
-  'google.com/finance',
-  'google.com/fusiontables',
-  'google.com/health',
-  'google.com/ig',
-  'google.com/imghp',
-  'google.com/intl',
-  'google.com/latitude',
-  'google.com/mobile',
-  'google.com/offers',
-  'google.com/patents',
-  'google.com/prdhp',
-  'google.com/products',
-  'google.com/reader',
-  'google.com/schhp',
-  'google.com/shopping',
-  'google.com/talk',
-  'google.com/trends',
-  'google.com/videohp',
-  'google.com/voice',
-  'google.com/wallet',
-  'google.com/webhp',
-  'googleadservices.com',
-  'googlesyndication.com',
-  'groups.google.com',
-  'health.google.com',
-  'images.google.com',
-  'knol.google.com',
-  'latitude.google.com',
-  'mail.google.com',
-  'music.google.com',
-  'news.google.com',
-  'orkut.com',
-  'panoramio.com',
-  'picasa.google.com',
-  'picasaweb.google.com',
-  'picnik.com',
-  'plus.google.com',
-  'scholar.google.com',
-  'sites.google.com',
-  'sketchup.google.com',
-  'toolbar.google.com',
-  'translate.google.com',
-  'video.google.com',
-  'voice.google.com',
-  'youtube.com'
-];
+  var Ggdc = {
+	  
+	/* The domain names Facebook phones home with, lowercased. */
+	DOMAINS : [
+				  '2mdn.net',
+				  'accounts.google.com',
+				  'blogger.com',
+				  'books.google.com',
+				  'code.google.com',
+				  'docs.google.com',
+				  'doubleclick.net',
+				  'earth.google.com',
+				  'feedburner.com',
+				  'gmodules.com',
+				  'google-analytics.com',
+				  'google.com/alerts',
+				  'google.com/blogsearch',
+				  'google.com/bookmarks',
+				  'google.com/calendar',
+				  'google.com/chrome',
+				  'google.com/coop',
+				  'google.com/cse',
+				  'google.com/finance',
+				  'google.com/fusiontables',
+				  'google.com/health',
+				  'google.com/ig',
+				  'google.com/imghp',
+				  'google.com/intl',
+				  'google.com/latitude',
+				  'google.com/mobile',
+				  'google.com/offers',
+				  'google.com/patents',
+				  'google.com/prdhp',
+				  'google.com/products',
+				  'google.com/reader',
+				  'google.com/schhp',
+				  'google.com/shopping',
+				  'google.com/talk',
+				  'google.com/trends',
+				  'google.com/videohp',
+				  'google.com/voice',
+				  'google.com/wallet',
+				  'google.com/webhp',
+				  'googleadservices.com',
+				  'googlesyndication.com',
+				  'groups.google.com',
+				  'health.google.com',
+				  'images.google.com',
+				  'knol.google.com',
+				  'latitude.google.com',
+				  'mail.google.com',
+				  'music.google.com',
+				  'news.google.com',
+				  'orkut.com',
+				  'panoramio.com',
+				  'picasa.google.com',
+				  'picasaweb.google.com',
+				  'picnik.com',
+				  'plus.google.com',
+				  'scholar.google.com',
+				  'sites.google.com',
+				  'sketchup.google.com',
+				  'toolbar.google.com',
+				  'translate.google.com',
+				  'video.google.com',
+				  'voice.google.com',
+				  'youtube.com'			   
+			   ],
+			
+	/* The XPCOM interfaces. */
+	INTERFACES : Components.interfaces,
+	
+	/*
+	  Determines whether any of a bucket of domains is part of a URL, regex free.
+	*/
+	isMatching: function(url, domains) {
+	  const DOMAIN_COUNT = domains.length;
+	  for (var i = 0; i < DOMAIN_COUNT; i++)
+		  if (url.toLowerCase().indexOf(domains[i], 2) >= 2) return true;
+			  // A valid URL has at least two characters ("//"), then the domain.
+	},
+	
+	/* Initialization */	  
+    init : function() {  
 
-/*
-  Determines whether any of a bucket of domains is part of a URL, regex free.
-*/
-function isMatching(url, domains) {
-  const DOMAIN_COUNT = domains.length;
-  for (var i = 0; i < DOMAIN_COUNT; i++)
-      if (url.toLowerCase().indexOf(domains[i], 2) >= 2) return true;
-          // A valid URL has at least two characters ("//"), then the domain.
+		/* Traps and selectively cancels a request. */
+        Ggdc.obsService =  Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);  
+		Ggdc.obsService.addObserver({observe: function(subject) {
+			Ggdc.NOTIFICATION_CALLBACKS =
+				subject.QueryInterface(Ggdc.INTERFACES.nsIHttpChannel).notificationCallbacks
+					|| subject.loadGroup.notificationCallbacks;
+			Ggdc.BROWSER =
+				Ggdc.NOTIFICATION_CALLBACKS &&
+					gBrowser.getBrowserForDocument(
+					  Ggdc.NOTIFICATION_CALLBACKS
+						.getInterface(Ggdc.INTERFACES.nsIDOMWindow).top.document
+					);
+			subject.referrer.ref;
+				// HACK: The URL read otherwise outraces the window unload.
+			Ggdc.BROWSER && !Ggdc.isMatching(Ggdc.BROWSER.currentURI.spec, Ggdc.DOMAINS) &&
+				Ggdc.isMatching(subject.URI.spec, Ggdc.DOMAINS) &&
+					subject.cancel(Components.results.NS_ERROR_ABORT);
+		  }}, 'http-on-modify-request', false);
+	}
+  }
 }
 
-/* Traps and selectively cancels a request. */
-Components.classes['@mozilla.org/observer-service;1']
-  .getService(GOOGLE_INTERFACES.nsIObserverService)
-  .addObserver({observe: function(subject) {
-    const NOTIFICATION_CALLBACKS =
-        subject.QueryInterface(
-          GOOGLE_INTERFACES.nsIHttpChannel
-        ).notificationCallbacks || subject.loadGroup.notificationCallbacks;
-    const BROWSER =
-        NOTIFICATION_CALLBACKS &&
-            gBrowser.getBrowserForDocument(
-              NOTIFICATION_CALLBACKS
-                .getInterface(GOOGLE_INTERFACES.nsIDOMWindow).top.document
-            );
-    subject.referrer.ref;
-        // HACK: The URL read otherwise outraces the window unload.
-    BROWSER && !isMatching(BROWSER.currentURI.spec, GOOGLE_DOMAINS) &&
-        isMatching(subject.URI.spec, GOOGLE_DOMAINS) &&
-            subject.cancel(Components.results.NS_ERROR_ABORT);
-  }}, 'http-on-modify-request', false);
+/* Initialization of Fbdc object on load */
+window.addEventListener("load", function() { Ggdc.init(); }, false);  
+
+
+
