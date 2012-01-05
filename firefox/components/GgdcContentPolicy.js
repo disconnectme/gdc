@@ -20,6 +20,7 @@
     Gary Teh <garyjob@gmail.com>	
 */
 
+
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cr = Components.results;
@@ -39,15 +40,15 @@ function GgdcContentPolicy() {
 GgdcContentPolicy.prototype =
 {
 	classDescription: "This is an image blocker",
-	contractID: "@disconnect.me/fbdc/contentpolicy;1",
-	classID: Components.ID("{d32a3c00-4ed3-11de-8a39-0800200c9a63}"),
+	contractID: "@disconnect.me/ggdc/contentpolicy;1",
+	classID: Components.ID("{d32a3c00-4ed3-11de-8a39-0800200c9a65}"),
 	
 	_xpcom_categories:  [{ category: "content-policy"}],
 
 	QueryInterface:     XPCOMUtils.generateQI([Ci.nsIContentPolicy]),
 
 	/* The domain names Facebook phones home with, lowercased. */
-	DOMAINS :  [
+	DOMAINS :   [
 				  '2mdn.net',
 				  'accounts.google.com',
 				  'blogger.com',
@@ -134,7 +135,7 @@ GgdcContentPolicy.prototype =
 	/* A function of the nsIContentPolicy interface : called when an element is to be loaded from the internet */
 	shouldLoad: function (contType, contLoc, reqOrig, aContext, typeGuess, extra) {
 		if(reqOrig != null && contLoc.host!="browser" && contLoc.host!="global"){
-			this.rejectedLoc += "checking > "+contLoc.host+" : "+reqOrig.host+" -- results: "+this.isMatching(contLoc.host, this.DOMAINS)+"\r\n";				
+			//this.rejectedLoc += "checking > "+contLoc.host+" : "+reqOrig.host+" -- results: "+this.isMatching(contLoc.host, this.DOMAINS)+"\r\n";				
 			if( reqOrig.host !=contLoc.host && this.isMatching(contLoc.host, this.DOMAINS) && typeof aContext.ownerDocument != null){
 				this.rejectedLoc += "rejected > "+contLoc.host+" : "+reqOrig.host+"\r\n";				
 				try{

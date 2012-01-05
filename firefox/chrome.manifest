@@ -21,6 +21,6 @@ content ggdc chrome/content/
 skin ggdc default chrome/skin/
 overlay chrome://browser/content/browser.xul chrome://ggdc/content/overlay.xul
 
-component {d32a3c00-4ed3-11de-8a39-0800200c9a63} components/GgdcContentPolicy.js
-contract @disconnect.me.org/ggdc/contentpolicy;1 {d32a3c00-4ed3-11de-8a39-0800200c9a63}
-category content-policy @disconnect.me.org/ggdc/contentpolicy;1 @disconnect.me.org/ggdc/contentpolicy;1
+component {d32a3c00-4ed3-11de-8a39-0800200c9a65} components/GgdcContentPolicy.js
+contract @disconnect.me/ggdc/contentpolicy;1 {d32a3c00-4ed3-11de-8a39-0800200c9a65}
+category content-policy @disconnect.me/ggdc/contentpolicy;1 @disconnect.me/ggdc/contentpolicy;1

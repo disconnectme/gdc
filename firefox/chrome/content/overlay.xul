@@ -30,17 +30,14 @@
 
   
 <hbox id="urlbar-icons">  
-  
 
-        <image id="ggdc-image-urlbar" src="chrome://ggdc/content/icon_urlbar.png" 
+        <image id="ggdc-image-urlbar" src="chrome://ggdc/content/icon_urlbar_active.png" 
 			label="Google Disconnect"
 			tooltiptext="Google Disconnect"
 			popup="statusGoogleBarPanelMenu"
-			onclick='Ggdc.updateCount()'				 
-		
+			onclick='Ggdc.updateCount()'				 		
 		/>
 
-	  
 	  <menupopup id="statusGoogleBarPanelMenu" position="after_start">  
         <menuitem oncommand='Ggdc.block()'>
           <image id="ggdcBlockingIcon" class="channelIcon" src="chrome://ggdc/content/google-activated.png" />				

@@ -20,6 +20,8 @@
     Brian Kennish <byoogle@gmail.com>
 */
 
+
+
 if (typeof Ggdc == "undefined") {  
 
   var Ggdc = {
@@ -73,8 +75,16 @@ if (typeof Ggdc == "undefined") {
 	
 	/* show Xpcom status */
 	showXpcom: function(){
-		var myComponent = Cc['@disconnect.me.org/ggdc/contentpolicy;1'].getService().wrappedJSObject;;
-    	alert(myComponent.showStatus()); 			
+		var myComponent = Cc['@disconnect.me/ggdc/contentpolicy;1'].getService().wrappedJSObject;;
+    	alert(myComponent.showStatus()); 		
+
+		var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+						   .getInterface(Components.interfaces.nsIWebNavigation)
+						   .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+						   .rootTreeItem
+						   .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+						   .getInterface(Components.interfaces.nsIDOMWindow);
+		alert(mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount);
 	},
 
 	/* Lifts international trade embargo on Facebook */
@@ -111,6 +121,7 @@ if (typeof Ggdc == "undefined") {
 				Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar_active.png");
 			}
 		});			
+
 		if(window.content.localStorage.getItem('GgdcStatus')=="unblock"){
 			Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar_inactive.png");								
 		}
@@ -174,27 +185,26 @@ if (typeof Ggdc == "undefined") {
         // if (win.frameElement) return; // skip iframes/frames  
         //alert("Number of Facebook Widgets : " +doc.DcGgdcCount); 
 		
-		
-		var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-						   .getInterface(Components.interfaces.nsIWebNavigation)
-						   .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
-						   .rootTreeItem
-						   .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-						   .getInterface(Components.interfaces.nsIDOMWindow);
-						   
-		//alert(mainWindow.getBrowser().selectedBrowser.contentWindow.document.DcGgdcCount);
-		
-		if(typeof mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == "undefined"){
-			mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount = 0;			
-			Ggdc.jQuery("#ggdc-image-urlbar").hide();			
-		}
-		else if(mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == 0){
-			Ggdc.jQuery("#ggdc-image-urlbar").hide();			
-		}
-		else{
-			Ggdc.jQuery("#ggdc-image-urlbar").show();						
-		}
-		
+		window.setTimeout(function() {
+			var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+							   .getInterface(Components.interfaces.nsIWebNavigation)
+							   .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+							   .rootTreeItem
+							   .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+							   .getInterface(Components.interfaces.nsIDOMWindow);
+							   
+			if(typeof mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == "undefined"){
+				mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount = 0;			
+				Ggdc.jQuery("#ggdc-image-urlbar").hide();			
+			}
+			else if(mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == 0){
+				Ggdc.jQuery("#ggdc-image-urlbar").hide();			
+			}
+			else{
+				Ggdc.jQuery("#ggdc-image-urlbar").show();						
+			}
+
+		}, 500);
     },
 	
 	/* Returns all attributes in any javascript/DOM Object in a string */
