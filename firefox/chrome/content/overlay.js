@@ -24,76 +24,9 @@ if (typeof Ggdc == "undefined") {
 
   var Ggdc = {
 	  
-	/* The domain names Facebook phones home with, lowercased. */
-	DOMAINS : [
-				  '2mdn.net',
-				  'accounts.google.com',
-				  'blogger.com',
-				  'books.google.com',
-				  'code.google.com',
-				  'docs.google.com',
-				  'doubleclick.net',
-				  'earth.google.com',
-				  'feedburner.com',
-				  'gmodules.com',
-				  'google-analytics.com',
-				  'google.com/alerts',
-				  'google.com/blogsearch',
-				  'google.com/bookmarks',
-				  'google.com/calendar',
-				  'google.com/chrome',
-				  'google.com/coop',
-				  'google.com/cse',
-				  'google.com/finance',
-				  'google.com/fusiontables',
-				  'google.com/health',
-				  'google.com/ig',
-				  'google.com/imghp',
-				  'google.com/intl',
-				  'google.com/latitude',
-				  'google.com/mobile',
-				  'google.com/offers',
-				  'google.com/patents',
-				  'google.com/prdhp',
-				  'google.com/products',
-				  'google.com/reader',
-				  'google.com/schhp',
-				  'google.com/shopping',
-				  'google.com/talk',
-				  'google.com/trends',
-				  'google.com/videohp',
-				  'google.com/voice',
-				  'google.com/wallet',
-				  'google.com/webhp',
-				  'googleadservices.com',
-				  'googlesyndication.com',
-				  'groups.google.com',
-				  'health.google.com',
-				  'images.google.com',
-				  'knol.google.com',
-				  'latitude.google.com',
-				  'mail.google.com',
-				  'music.google.com',
-				  'news.google.com',
-				  'orkut.com',
-				  'panoramio.com',
-				  'picasa.google.com',
-				  'picasaweb.google.com',
-				  'picnik.com',
-				  'plus.google.com',
-				  'scholar.google.com',
-				  'sites.google.com',
-				  'sketchup.google.com',
-				  'toolbar.google.com',
-				  'translate.google.com',
-				  'video.google.com',
-				  'voice.google.com',
-				  'youtube.com'			   
-			   ],
-			
-	/* The XPCOM interfaces. */
-	INTERFACES : Components.interfaces,
-	
+	/* The inclusion of the jQuery library*/
+	jQuery : jQuery.noConflict(),
+	  
 	/*
 	  Determines whether any of a bucket of domains is part of a URL, regex free.
 	*/
@@ -104,33 +37,180 @@ if (typeof Ggdc == "undefined") {
 			  // A valid URL has at least two characters ("//"), then the domain.
 	},
 	
+	/* updates the menu icon with the number of blocks */
+	updateCount: function(){
+
+		var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+						   .getInterface(Components.interfaces.nsIWebNavigation)
+						   .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+						   .rootTreeItem
+						   .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+						   .getInterface(Components.interfaces.nsIDOMWindow);		
+				
+		//alert(mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount);
+		if(typeof mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == "undefined"){
+			mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount= 0;
+		}
+		
+		if(	mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount > 0 ){
+			Ggdc.jQuery("#GgdcBlockingIcon").attr("src", "chrome://ggdc/content/google-blocked.png" );
+		}
+		else{
+			Ggdc.jQuery("#GgdcBlockingIcon").attr("src", "chrome://ggdc/content/google-activated.png" );			
+		}
+		
+		if(window.content.localStorage.getItem('GgdcStatus')=="unblock"){
+			Ggdc.jQuery("#GgdcBlock").attr("value","Block");			
+			Ggdc.jQuery("#GgdcUnblock").attr("value",mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount+" unblocked");						
+		}
+		else{
+			Ggdc.jQuery("#GgdcBlock").attr("value",mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount+" blocked");			
+			Ggdc.jQuery("#GgdcUnblock").attr("value","Unblock");						
+		}		
+
+
+	},
+	
+	/* show Xpcom status */
+	showXpcom: function(){
+		var myComponent = Cc['@disconnect.me.org/ggdc/contentpolicy;1'].getService().wrappedJSObject;;
+    	alert(myComponent.showStatus()); 			
+	},
+
+	/* Lifts international trade embargo on Facebook */
+	unblock: function(){
+
+		if(window.content.localStorage.getItem('GgdcStatus')=="unblock"){		
+			return;
+		}
+		window.content.localStorage.setItem('GgdcStatus', "unblock");	
+		window.content.location.reload();
+
+	},
+	
+	/* Enforce international trade embargo on Facebook */
+	block: function(){
+		if(window.content.localStorage.getItem('GgdcStatus')!="unblock"){		
+			return;
+		}		
+		window.content.localStorage.setItem('GgdcStatus', "block");	
+		window.content.location.reload();		
+	},
+	
+	/* Switches the image displayed by the Url Bar icon */
+	iconAnimation : function(){
+
+		Ggdc.jQuery("#ggdc-image-urlbar").mouseover(function(){												 
+			Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar.png");
+		});	
+		Ggdc.jQuery("#ggdc-image-urlbar").mouseout(function(){
+			if(window.content.localStorage.getItem('GgdcStatus')=="unblock"){
+				Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar_inactive.png");								
+			}
+			else{
+				Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar_active.png");
+			}
+		});			
+		if(window.content.localStorage.getItem('GgdcStatus')=="unblock"){
+			Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar_inactive.png");								
+		}
+		else{
+			Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar_active.png");
+		}
+		
+		
+	},
+	
 	/* Initialization */	  
     init : function() {  
 
-		/* Traps and selectively cancels a request. */
-        Ggdc.obsService =  Cc["@mozilla.org/observer-service;1"].getService(Ci.nsIObserverService);  
-		Ggdc.obsService.addObserver({observe: function(subject) {
-			Ggdc.NOTIFICATION_CALLBACKS =
-				subject.QueryInterface(Ggdc.INTERFACES.nsIHttpChannel).notificationCallbacks
-					|| subject.loadGroup.notificationCallbacks;
-			Ggdc.BROWSER =
-				Ggdc.NOTIFICATION_CALLBACKS &&
-					gBrowser.getBrowserForDocument(
-					  Ggdc.NOTIFICATION_CALLBACKS
-						.getInterface(Ggdc.INTERFACES.nsIDOMWindow).top.document
-					);
-			subject.referrer.ref;
-				// HACK: The URL read otherwise outraces the window unload.
-			Ggdc.BROWSER && !Ggdc.isMatching(Ggdc.BROWSER.currentURI.spec, Ggdc.DOMAINS) &&
-				Ggdc.isMatching(subject.URI.spec, Ggdc.DOMAINS) &&
-					subject.cancel(Components.results.NS_ERROR_ABORT);
-		  }}, 'http-on-modify-request', false);
-	}
+		/* handles the url bar icon animation */
+		Ggdc.iconAnimation();	
+
+		if(gBrowser){
+			gBrowser.addEventListener("DOMContentLoaded", Ggdc.onPageLoad, false);  
+			gBrowser.tabContainer.addEventListener("TabAttrModified", Ggdc.onTabChanged, false);  		
+		}
+	},
+	
+	/* called when another tab is clicked */
+	onTabChanged: function(aEvent){
+		var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+						   .getInterface(Components.interfaces.nsIWebNavigation)
+						   .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+						   .rootTreeItem
+						   .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+						   .getInterface(Components.interfaces.nsIDOMWindow);
+						   
+		//alert(mainWindow.getBrowser().selectedBrowser.contentWindow.document.DcGgdcCount);
+		
+		if(typeof mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == "undefined"){
+			mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount = 0;			
+			Ggdc.jQuery("#ggdc-image-urlbar").hide();			
+		}
+		else if(mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == 0){
+			Ggdc.jQuery("#ggdc-image-urlbar").hide();			
+		}
+		else{
+			Ggdc.jQuery("#ggdc-image-urlbar").show();						
+		}
+		if(window.content.localStorage.getItem('GgdcStatus')=="unblock"){
+			Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar_inactive.png");								
+
+		}
+		else{
+			Ggdc.jQuery("#ggdc-image-urlbar").attr("src", "chrome://ggdc/content/icon_urlbar_active.png");
+		}		
+		
+	},
+	
+	/* called when page is loaded */	
+    onPageLoad: function(aEvent) {  
+        //var doc = aEvent.originalTarget; // doc is document that triggered the event  
+        //var win = doc.defaultView; // win is the window for the doc  
+        // test desired conditions and do something  
+        // if (doc.nodeName == "#document") return; // only documents  
+        // if (win != win.top) return; //only top window.  
+        // if (win.frameElement) return; // skip iframes/frames  
+        //alert("Number of Facebook Widgets : " +doc.DcGgdcCount); 
+		
+		
+		var mainWindow = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+						   .getInterface(Components.interfaces.nsIWebNavigation)
+						   .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
+						   .rootTreeItem
+						   .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+						   .getInterface(Components.interfaces.nsIDOMWindow);
+						   
+		//alert(mainWindow.getBrowser().selectedBrowser.contentWindow.document.DcGgdcCount);
+		
+		if(typeof mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == "undefined"){
+			mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount = 0;			
+			Ggdc.jQuery("#ggdc-image-urlbar").hide();			
+		}
+		else if(mainWindow.getBrowser().selectedBrowser.contentWindow.document.GgdcCount == 0){
+			Ggdc.jQuery("#ggdc-image-urlbar").hide();			
+		}
+		else{
+			Ggdc.jQuery("#ggdc-image-urlbar").show();						
+		}
+		
+    },
+	
+	/* Returns all attributes in any javascript/DOM Object in a string */
+	getAllAttrInObj: function(obj){
+		status = "";	
+		status += "<p>";
+		Ggdc.jQuery.each(obj , function(name, value) {
+			status += name + ": " + value+"<br>";
+		});	
+		status += "</p>";	
+		return status;
+	},	
+	
+	
   }
 }
 
-/* Initialization of Fbdc object on load */
+/* Initialization of Ggdc object on load */
 window.addEventListener("load", function() { Ggdc.init(); }, false);  
-
-
-
