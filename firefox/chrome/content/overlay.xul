@@ -23,7 +23,35 @@
 <overlay
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
   xmlns:html="http://www.w3.org/1999/xhtml"
-  id="gdc"
+  id="ggdc"
 >
+  <script src="jquery.js"/>  
   <script src="overlay.js"/>
+
+  
+<hbox id="urlbar-icons">  
+
+        <image id="ggdc-image-urlbar" src="chrome://ggdc/content/icon_urlbar_active.png" 
+			label="Google Disconnect"
+			tooltiptext="Google Disconnect"
+			popup="statusGoogleBarPanelMenu"
+			onclick='Ggdc.updateCount()'				 		
+		/>
+
+	  <menupopup id="statusGoogleBarPanelMenu" position="after_start">  
+        <menuitem oncommand='Ggdc.block()'>
+          <image id="ggdcBlockingIcon" class="channelIcon" src="chrome://ggdc/content/google-activated.png" />				
+          <label value="0" id="GgdcBlock" />  							  
+
+	    </menuitem>			
+        <menuitem oncommand='Ggdc.unblock()'>
+          <image class="channelIcon" src="chrome://ggdc/content/google-deactivated.png" />				
+          <label value="Unblock"  id="GgdcUnblock"  />  		
+	    </menuitem>				
+						
+	  </menupopup>  
+	
+  
+</hbox>    
+  
 </overlay>

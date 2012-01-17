@@ -34,8 +34,8 @@
     <em:description>
       Stop Google from tracking the webpages you go to.
     </em:description>
-    <em:iconURL>chrome://gdc/skin/icon.png</em:iconURL>
-    <em:icon64URL>chrome://gdc/skin/icon64.png</em:icon64URL>
+    <em:iconURL>chrome://ggdc/skin/icon.png</em:iconURL>
+    <em:icon64URL>chrome://ggdc/skin/icon64.png</em:icon64URL>
     <em:homepageURL>http://disconnect.me/google</em:homepageURL>
     <!-- Firefox -->
     <em:targetApplication>
