@@ -39,13 +39,13 @@
       <menuseparator/>
       <menuitem
         id="google-disconnect-help"
-        label="Ask us a question"
+        label="Ask Disconnect a question"
         accesskey="A"
         value="http://getsatisfaction.com/disconnect"
       />
       <menuitem
         id="google-disconnect-feedback"
-        label="Give us props"
+        label="Give Disconnect props"
         accesskey="G"
         value="https://addons.mozilla.org/en-US/firefox/addon/gdc/"
       />
