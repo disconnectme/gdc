@@ -24,6 +24,7 @@
 const DOMAINS = [
   '2mdn.net',
   'accounts.google.com',
+  'apis.google.com',
   'blogger.com',
   'books.google.com',
   'code.google.com',
@@ -64,6 +65,7 @@ const DOMAINS = [
   'googleadservices.com',
   'googlesyndication.com',
   'groups.google.com',
+  'gstatic.com',
   'health.google.com',
   'images.google.com',
   'knol.google.com',
@@ -77,6 +79,7 @@ const DOMAINS = [
   'picasaweb.google.com',
   'picnik.com',
   'plus.google.com',
+  'plusone.google.com',
   'scholar.google.com',
   'sites.google.com',
   'sketchup.google.com',

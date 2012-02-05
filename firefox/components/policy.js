@@ -56,6 +56,7 @@ GoogleDisconnect.prototype = {
   domains: [
     '2mdn.net',
     'accounts.google.com',
+    'apis.google.com',
     'blogger.com',
     'books.google.com',
     'code.google.com',
@@ -96,6 +97,7 @@ GoogleDisconnect.prototype = {
     'googleadservices.com',
     'googlesyndication.com',
     'groups.google.com',
+    'gstatic.com',
     'health.google.com',
     'images.google.com',
     'knol.google.com',
@@ -109,6 +111,7 @@ GoogleDisconnect.prototype = {
     'picasaweb.google.com',
     'picnik.com',
     'plus.google.com',
+    'plusone.google.com',
     'scholar.google.com',
     'sites.google.com',
     'sketchup.google.com',
