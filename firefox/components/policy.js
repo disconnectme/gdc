@@ -23,6 +23,12 @@
 Components.utils.import('resource://gre/modules/XPCOMUtils.jsm');
 
 /**
+ * Constants.
+ */
+var contentPolicy = Components.interfaces.nsIContentPolicy;
+var accept = contentPolicy.ACCEPT;
+
+/**
  * Creates the component.
  */
 function GoogleDisconnect() { this.wrappedJSObject = this; }
@@ -137,15 +143,17 @@ GoogleDisconnect.prototype = {
    * Traps and selectively cancels a request.
    */
   shouldLoad: function(contentType, contentLocation, requestOrigin, context) {
-    var contentPolicy = Components.interfaces.nsIContentPolicy;
     var isMatching = this.isMatching;
     var domains = this.domains;
-    var result = contentPolicy.ACCEPT;
+    var result = accept;
 
     if (
       contentType != contentPolicy.TYPE_DOCUMENT && // The MIME type.
-          !isMatching(requestOrigin.host, domains) && // The whitelist.
-              isMatching(contentLocation.host, domains) // The blacklist.
+          requestOrigin && requestOrigin.asciiHost &&
+              !isMatching(requestOrigin.host, domains) && // The whitelist.
+                  contentLocation.asciiHost &&
+                      isMatching(contentLocation.host, domains)
+                          // The blacklist.
     ) {
       var html = context.ownerDocument;
       var googleRequestCount = html.googleRequestCount;
@@ -156,7 +164,12 @@ GoogleDisconnect.prototype = {
     }
 
     return result;
-  }
+  },
+
+  /**
+   * Passes a request through.
+   */
+  shouldProcess: function() { return accept; }
 }
 
 /**
