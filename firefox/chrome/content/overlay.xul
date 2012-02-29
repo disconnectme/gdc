@@ -41,7 +41,7 @@
         id="google-disconnect-help"
         label="Ask Disconnect a question"
         accesskey="A"
-        value="http://getsatisfaction.com/disconnect"
+        value="https://getsatisfaction.com/disconnect"
       />
       <menuitem
         id="google-disconnect-feedback"
