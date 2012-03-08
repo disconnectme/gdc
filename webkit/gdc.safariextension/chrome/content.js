@@ -86,8 +86,7 @@ const DOMAINS = [
   'toolbar.google.com',
   'translate.google.com',
   'video.google.com',
-  'voice.google.com',
-  'youtube.com'
+  'voice.google.com'
 ];
 
 /*
