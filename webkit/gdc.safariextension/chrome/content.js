@@ -20,7 +20,10 @@
     Brian Kennish <byoogle@gmail.com>
 */
 
-/* The domain names Google phones home with, lowercased. */
+/* The primary domain name Google phones home with, lowercased. */
+const PRIMARY_DOMAIN = 'google.';
+
+/* The rest of the domain names Google phones home with, lowercased. */
 const DOMAINS = [
   '2mdn.net',
   'accounts.google.com',
@@ -100,7 +103,7 @@ function isMatching(url, domains) {
 }
 
 /* Traps and selectively cancels a request. */
-if (!isMatching(location.href, DOMAINS))
+if (!isMatching(location.href, DOMAINS.concat(PRIMARY_DOMAIN)))
     document.addEventListener('beforeload', function(event) {
       if (isMatching(event.url, DOMAINS)) event.preventDefault();
     }, true);
