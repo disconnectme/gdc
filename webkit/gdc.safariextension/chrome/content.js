@@ -99,11 +99,11 @@ function isMatching(url, domains) {
   const DOMAIN_COUNT = domains.length;
   for (var i = 0; i < DOMAIN_COUNT; i++)
       if (url.toLowerCase().indexOf(domains[i], 2) >= 2) return true;
-          // A valid URL has at least two characters ("//"), then the domain.
+          // A valid URL has at least two characters ("//") then the domain.
 }
 
 /* Traps and selectively cancels a request. */
-if (!isMatching(location.href, DOMAINS.concat(PRIMARY_DOMAIN)))
+if (!isMatching(top.location.href, DOMAINS.concat(PRIMARY_DOMAIN)))
     document.addEventListener('beforeload', function(event) {
       if (isMatching(event.url, DOMAINS)) event.preventDefault();
-    }, true);
+    }, true); // TODO: Test every parent up to the top.

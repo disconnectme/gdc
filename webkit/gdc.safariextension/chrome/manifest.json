@@ -1,6 +1,6 @@
 {
   "name": "G Disconnect",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Stop Google from tracking the webpages you go to.",
   "icons": {"48": "48.png", "128": "128.png"},
   "permissions": [
