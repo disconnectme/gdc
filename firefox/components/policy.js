@@ -147,20 +147,26 @@ GoogleDisconnect.prototype = {
     var domains = this.domains;
     var result = accept;
 
-    if (
-      contentType != contentPolicy.TYPE_DOCUMENT && // The MIME type.
-          requestOrigin && requestOrigin.asciiHost &&
-              !isMatching(requestOrigin.host, domains) && // The whitelist.
-                  contentLocation.asciiHost &&
-                      isMatching(contentLocation.host, domains)
-                          // The blacklist.
-    ) {
+    if (context) {
       var html = context.ownerDocument;
-      var googleRequestCount = html.googleRequestCount;
-      html.googleRequestCount =
-          typeof googleRequestCount == 'undefined' ? 1 : ++googleRequestCount;
-      if (!JSON.parse(html.defaultView.content.localStorage.googleUnblocked))
-          result = contentPolicy.REJECT_SERVER; // The blocking state.
+      var content = html.defaultView.content;
+
+      if (
+        contentType != contentPolicy.TYPE_DOCUMENT && // The MIME type.
+            requestOrigin && requestOrigin.asciiHost &&
+                !isMatching(requestOrigin.host, domains) &&
+                    !isMatching(content.top.location.hostname, domains) &&
+                        // The whitelist.
+                            contentLocation.asciiHost &&
+                                isMatching(contentLocation.host, domains)
+                                    // The blacklist.
+      ) {
+        var googleRequestCount = html.googleRequestCount;
+        html.googleRequestCount =
+            typeof googleRequestCount == 'undefined' ? 1 : ++googleRequestCount;
+        if (!JSON.parse(content.localStorage.googleUnblocked))
+            result = contentPolicy.REJECT_SERVER; // The blocking state.
+      }
     }
 
     return result;
