@@ -59,6 +59,7 @@ GoogleDisconnect.prototype = {
   /**
    * The domain names Google phones home with, lowercased.
    */
+  
   domains: [
     '2mdn.net',
     'accounts.google.com',
@@ -109,6 +110,7 @@ GoogleDisconnect.prototype = {
     'knol.google.com',
     'latitude.google.com',
     'mail.google.com',
+    'maps.google.com',
     'music.google.com',
     'news.google.com',
     'orkut.com',
@@ -164,8 +166,10 @@ GoogleDisconnect.prototype = {
         var googleRequestCount = html.googleRequestCount;
         html.googleRequestCount =
             typeof googleRequestCount == 'undefined' ? 1 : ++googleRequestCount;
-        if (!JSON.parse(content.localStorage.googleUnblocked))
+        if (!JSON.parse(content.localStorage.googleUnblocked)){
+			this.errorMessage += requestOrigin.host+"\r\n";
             result = contentPolicy.REJECT_SERVER; // The blocking state.
+		}
       }
     }
 
