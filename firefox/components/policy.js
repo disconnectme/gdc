@@ -57,6 +57,13 @@ GoogleDisconnect.prototype = {
       XPCOMUtils.generateQI([Components.interfaces.nsIContentPolicy]),
 
   /**
+   * The domain names Google phones home with, lowercased, that should not be messed around with.
+   */
+  whitelist_domains: [
+    'maps.google.com'
+  ],
+
+  /**
    * The domain names Google phones home with, lowercased.
    */
   domains: [
@@ -145,6 +152,7 @@ GoogleDisconnect.prototype = {
   shouldLoad: function(contentType, contentLocation, requestOrigin, context) {
     var isMatching = this.isMatching;
     var domains = this.domains;
+    var whitelist_domains = this.whitelist_domains;	
     var result = accept;
 
     if (context) {
@@ -158,14 +166,17 @@ GoogleDisconnect.prototype = {
                     !isMatching(content.top.location.hostname, domains) &&
                         // The whitelist.
                             contentLocation.asciiHost &&
-                                isMatching(contentLocation.host, domains)
+                                isMatching(contentLocation.host, domains) &&
                                     // The blacklist.
+                                        !isMatching(requestOrigin.host, whitelist_domains) //Leave calls to map.google.com alone
       ) {
         var googleRequestCount = html.googleRequestCount;
         html.googleRequestCount =
             typeof googleRequestCount == 'undefined' ? 1 : ++googleRequestCount;
-        if (!JSON.parse(content.localStorage.googleUnblocked))
+        if (!JSON.parse(content.localStorage.googleUnblocked)){
+			this.errorMessage += requestOrigin.host+"\r\n";
             result = contentPolicy.REJECT_SERVER; // The blocking state.
+		}
       }
     }
 
