@@ -57,15 +57,9 @@ GoogleDisconnect.prototype = {
       XPCOMUtils.generateQI([Components.interfaces.nsIContentPolicy]),
 
   /**
-   * The domain names Google phones home with, lowercased, that should not be messed around with.
-   */
-  whitelist_domains: [
-    'maps.google.com'
-  ],
-
-  /**
    * The domain names Google phones home with, lowercased.
    */
+  
   domains: [
     '2mdn.net',
     'accounts.google.com',
@@ -116,6 +110,7 @@ GoogleDisconnect.prototype = {
     'knol.google.com',
     'latitude.google.com',
     'mail.google.com',
+    'maps.google.com',
     'music.google.com',
     'news.google.com',
     'orkut.com',
@@ -152,7 +147,6 @@ GoogleDisconnect.prototype = {
   shouldLoad: function(contentType, contentLocation, requestOrigin, context) {
     var isMatching = this.isMatching;
     var domains = this.domains;
-    var whitelist_domains = this.whitelist_domains;	
     var result = accept;
 
     if (context) {
@@ -166,9 +160,8 @@ GoogleDisconnect.prototype = {
                     !isMatching(content.top.location.hostname, domains) &&
                         // The whitelist.
                             contentLocation.asciiHost &&
-                                isMatching(contentLocation.host, domains) &&
+                                isMatching(contentLocation.host, domains)
                                     // The blacklist.
-                                        !isMatching(requestOrigin.host, whitelist_domains) //Leave calls to map.google.com alone
       ) {
         var googleRequestCount = html.googleRequestCount;
         html.googleRequestCount =
