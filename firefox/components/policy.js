@@ -300,8 +300,11 @@ GoogleDisconnect.prototype = {
         var googleRequestCount = html.googleRequestCount;
         html.googleRequestCount =
             typeof googleRequestCount == 'undefined' ? 1 : ++googleRequestCount;
-        if (!JSON.parse(content.localStorage.googleUnblocked))
-            result = contentPolicy.REJECT_SERVER; // The blocking state.
+        var googleUnblocked = content.localStorage.googleUnblocked;
+        if (typeof googleUnblocked == 'undefined')
+            googleUnblocked = content.localStorage.googleUnblocked = false;
+        if (!JSON.parse(googleUnblocked)) result = contentPolicy.REJECT_SERVER;
+            // The blocking state.
       }
     }
 
