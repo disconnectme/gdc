@@ -28,16 +28,17 @@
     <em:type>2</em:type><!-- An extension. -->
     <em:id>google@disconnect.me</em:id>
     <em:name>Google Disconnect</em:name>
-    <em:version>2.4.1</em:version>
+    <em:version>2.4.2</em:version>
     <em:creator>Disconnect</em:creator>
     <em:developer>Brian Kennish</em:developer>
     <em:developer>Gary Teh</em:developer>
+    <em:developer>Dan Kwon</em:developer>
     <em:description>
       Stop Google from tracking the webpages you go to.
     </em:description>
     <em:iconURL>chrome://google-disconnect/skin/icon.png</em:iconURL>
     <em:icon64URL>chrome://google-disconnect/skin/icon64.png</em:icon64URL>
-    <em:homepageURL>http://disconnect.me/google</em:homepageURL>
+    <em:homepageURL>https://disconnect.me/google</em:homepageURL>
     <!-- Firefox. -->
     <em:targetApplication>
       <Description>
