@@ -61,7 +61,6 @@ GoogleDisconnect.prototype = {
    */
   domains: [
     '2mdn.net',
-    'blogger.com',
     'doubleclick.net',
     'feedburner.com',
     'gmodules.com',
@@ -261,7 +260,6 @@ GoogleDisconnect.prototype = {
     'orkut.com',
     'panoramio.com',
     'picnik.com',
-    'youtube.com'
   ],
 
   /**
