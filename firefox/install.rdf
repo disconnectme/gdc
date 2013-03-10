@@ -28,11 +28,12 @@
     <em:type>2</em:type><!-- An extension. -->
     <em:id>google@disconnect.me</em:id>
     <em:name>Google Disconnect</em:name>
-    <em:version>2.4.2</em:version>
+    <em:version>2.4.3</em:version>
     <em:creator>Disconnect</em:creator>
     <em:developer>Brian Kennish</em:developer>
     <em:developer>Gary Teh</em:developer>
     <em:developer>Dan Kwon</em:developer>
+    <em:developer>John Malc</em:developer>
     <em:description>
       Stop Google from tracking the webpages you go to.
     </em:description>
