@@ -1,7 +1,7 @@
 /*
   An XPCOM component that stops Google from tracking the webpages you go to.
 
-  Copyright 2010-2012 Disconnect, Inc.
+  Copyright 2010-2013 Disconnect, Inc.
 
   This program is free software: you can redistribute it and/or modify it under
   the terms of the GNU General Public License as published by the Free Software
