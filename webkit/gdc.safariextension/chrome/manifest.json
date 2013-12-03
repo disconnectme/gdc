@@ -1,6 +1,7 @@
 {
+  "manifest_version": 2,
   "name": "G Disconnect",
-  "version": "1.5.2",
+  "version": "1.6.0",
   "description": "Stop Google from tracking the webpages you go to.",
   "icons": {"48": "48.png", "128": "128.png"},
   "permissions": [
